@@ -1,0 +1,5 @@
+lex.yy.c
+main.o
+tree
+y.tab.c
+y.tab.o
