@@ -3,3 +3,6 @@ main.o
 tree
 y.tab.c
 y.tab.o
+*.o
+*.hi
+**/main
