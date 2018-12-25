@@ -6,9 +6,12 @@ import           System.Environment (getArgs)
 
 myTraverse :: [String] -> Cell
 myTraverse (x:y:xs)
-  | "node" `isPrefixOf` x = Node (head . tail $ splitOn "(" x) (myTraverse $ y : xs)
+  | "node" `isPrefixOf` x = Node (secondElm splitedByRParen) (myTraverse $ y : xs)
   | "cons" `isPrefixOf` x = Cons (myTraverse [y]) (myTraverse xs)
-  | "leaf" `isPrefixOf` x = Leaf (head . tail $ splitOn "(" $ head $ splitOn " " x) (unpack $ dropWhileEnd (==')') $ pack . head . tail $ splitOn " " x)
+  | "leaf" `isPrefixOf` x = Leaf (secondElm $ splitOn "(" $ head splitedBySpace) (unpack $ dropWhileEnd (==')') $ pack . secondElm $ splitedBySpace)
+  where splitedBySpace = splitOn " " x
+        splitedByRParen = splitOn "(" x
+        secondElm = head . tail
 myTraverse [x]
   | "leaf" `isPrefixOf` x = Leaf (head . tail $ splitOn "(" $ head $ splitOn " " x) (unpack $ dropWhileEnd (==')') $ pack . head . tail $ splitOn " " x)
 myTraverse _      =  Empty
