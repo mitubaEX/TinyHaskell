@@ -2,6 +2,7 @@ import           CellTree
 import           Data.List          (isPrefixOf)
 import           Data.List.Split    (splitOn)
 import           Data.Text          (dropWhileEnd, pack, strip, unpack)
+import           Eval
 import           System.Environment (getArgs)
 
 myTraverse :: [String] -> Cell
@@ -21,3 +22,4 @@ main = do
   fileBody <- readFile $ head args
   print $ map (strip . pack) $ splitOn "\n" fileBody
   print $ myTraverse $ map (unpack . strip . pack) (splitOn "\n" fileBody)
+  print $ myEval (myTraverse $ map (unpack . strip . pack) (splitOn "\n" fileBody)) ""
