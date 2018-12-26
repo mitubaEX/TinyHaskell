@@ -2,7 +2,7 @@
 #include "defs.h"
 #define YYSTYPE Cell *
 %}
-%token	ID INTEGER REAL INT FLOAT PRINT SEMICOLON COMMA 
+%token	ID INTEGER REAL INT FLOAT PRINT SEMICOLON COMMA
 	EQUAL ADD SUBTRACT MULTIPLY DIVIDE LPAR RPAR UNKNOWN;
 %%
 Program
@@ -13,6 +13,7 @@ Statements
 Statement
 	: Declare SEMICOLON		{ $$ = $1; }
 	| Assign SEMICOLON		{ $$ = $1; }
+	| Expressions SEMICOLON		{ $$ = $1; }
 	| Print SEMICOLON		{ $$ = $1; }
 Declare
 	: Type Variables		{ $$ = node("TYPE", cons($1, $2)); }

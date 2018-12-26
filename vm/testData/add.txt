@@ -1,0 +1,4 @@
+    node(+
+        cons(
+            leaf(INTEGER 1)
+            leaf(INTEGER 2)))
