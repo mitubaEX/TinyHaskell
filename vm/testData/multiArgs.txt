@@ -1,0 +1,4 @@
+    node(=
+        cons(
+            leaf(ID y a b c d)
+            leaf(INTEGER 1)))

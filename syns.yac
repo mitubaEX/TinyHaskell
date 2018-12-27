@@ -25,6 +25,10 @@ Variables
 	| Variables COMMA Variable	{ $$ = node(",", cons($1, $3)); }
 Assign
 	: Variable EQUAL Expression	{ $$ = node("=", cons($1, $3)); }
+	| Variable Arguments EQUAL Expression	{ $$ = node("=", cons_func($1, $2, $4)); }
+Arguments
+	: Variable { $$ = $1; }
+	| Arguments Variable { $$ = node(",", cons($1, $2)); }
 Print
 	: PRINT Expressions		{ $$ = node("PRINT", $2); }
 Expressions

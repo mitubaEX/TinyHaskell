@@ -11,6 +11,7 @@ typedef struct cell {
 	int          kind;
 	struct cell *head;
 	struct cell *tail;
+	struct cell *args;
 } Cell;
 
 extern char *yytext;
@@ -22,6 +23,7 @@ void comment(void);
 int yyparse(void);
 void yyerror(char*);
 Cell *cons(Cell *, Cell *);
+Cell *cons_func(Cell *, Cell *, Cell *);
 Cell *node(char *, Cell *);
 Cell *leaf(char *, char *);
 void tree(Cell *);
