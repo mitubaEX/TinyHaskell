@@ -1,9 +1,13 @@
+
     node(=
         cons(
             leaf(ID y)
             leaf(INTEGER 1)))
 -----------------------------
+
     node(=
         cons(
             leaf(ID x)
             leaf(INTEGER 1)))
+-----------------------------
+
