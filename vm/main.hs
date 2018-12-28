@@ -8,8 +8,11 @@ import           System.Environment (getArgs)
 
 main = do
   args <- getArgs
-  fileBody <- readFile $ head args
+  fileBody <- if length args < 1
+    then getContents
+    else readFile $ head args
   print $ map (strip . pack) $ splitOn "-----------------------------\n" fileBody
   print $ map performTraverse (splitOn "-----------------------------\n" fileBody)
   let a = map performTraverse (splitOn "-----------------------------\n" fileBody)
-  print $ map performEval $ filter (/= CellTree.Empty) a
+  let valList = map performEval $ filter (/= CellTree.Empty) a
+  print valList
