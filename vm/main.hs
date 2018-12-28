@@ -17,9 +17,13 @@ myTraverse [x]
   | "leaf" `isPrefixOf` x = Leaf (head . tail $ splitOn "(" $ head $ splitOn " " x) (unpack $ dropWhileEnd (==')') $ pack . unwords . tail $ splitOn " " x)
 myTraverse _      =  Empty
 
+performTraverse :: String -> Cell
+performTraverse a = myTraverse $ map (unpack . strip . pack) $ tail $ splitOn "\n" a
+
 main = do
   args <- getArgs
   fileBody <- readFile $ head args
-  print $ map (strip . pack) $ splitOn "\n" fileBody
-  print $ myTraverse $ map (unpack . strip . pack) (splitOn "\n" fileBody)
-  print $ myEval (myTraverse $ map (unpack . strip . pack) (splitOn "\n" fileBody)) ""
+  print $ map (strip . pack) $ splitOn "-----------------------------\n" fileBody
+  print $ map performTraverse (splitOn "-----------------------------\n" fileBody)
+  let a = map performTraverse (splitOn "-----------------------------\n" fileBody)
+  print $ map performEval a

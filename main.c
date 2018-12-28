@@ -58,7 +58,7 @@ Cell *leaf(char *car, char *cdr) {
 
 void tree(Cell *pointer) {
 	visit(pointer, 1);
-	printf("\n");
+	printf("\n-----------------------------\n");
 }
 
 void args_visit(Cell *pointer, int level) {

@@ -1,10 +1,21 @@
 module Eval (
-    myEval
+    myEval,
+    performEval
     ) where
 
 import           CellTree
+import           Control.Monad.State
+
+data Value = Empty | Function String String
+
+type Variables = [Value]
+type VariablesState = (Bool, [Value])
 
 type Op = String
+
+addM :: Num a => Maybe a -> Maybe a -> Maybe a
+addM (Just a) (Just b) = Just $ a + b
+addM _ _               = Just 0
 
 myEval :: Cell -> Op -> String
 myEval (Node a b) _
