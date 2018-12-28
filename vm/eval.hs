@@ -8,9 +8,6 @@ import           Control.Monad.State
 
 data Value = Empty | Function String String
 
-type Variables = [Value]
-type VariablesState = (Bool, [Value])
-
 type Op = String
 
 addM :: Num a => Maybe a -> Maybe a -> Maybe a
@@ -33,3 +30,7 @@ myEval (Cons a b) c
     | otherwise = emptyMyEval a ++ emptyMyEval b
     where emptyMyEval a = myEval a ""
 myEval (Leaf a b) _ = b
+myEval _ _ = ""
+
+performEval :: Cell -> String
+performEval a = myEval a ""
