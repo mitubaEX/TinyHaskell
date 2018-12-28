@@ -1,6 +1,7 @@
 module Eval (
     myEval,
     performEval,
+    Value(..)
     ) where
 
 import           CellTree
@@ -16,7 +17,7 @@ data Value =
     | Mod Value Value
     | Number Integer
     | ID String
-    | Other Value Value deriving (Show)
+    | Other Value Value deriving (Show, Eq)
 
 type Op = String
 

@@ -4,6 +4,7 @@ import           Data.List.Split    (splitOn)
 import           Data.Text          (dropWhileEnd, pack, strip, unpack)
 import           Eval
 import           Parser
+import           Run
 import           System.Environment (getArgs)
 
 main = do
@@ -16,3 +17,6 @@ main = do
   let a = map performTraverse (splitOn "-----------------------------\n" fileBody)
   let valList = map performEval $ filter (/= CellTree.Empty) a
   print valList
+
+  let resultList = performRun valList
+  print resultList
