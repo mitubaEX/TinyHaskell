@@ -7,6 +7,7 @@ module Eval (
 import           CellTree
 import           Control.Monad.State
 import           Data.Char
+import           Data.List.Split     (splitOn)
 
 data Value =
     Empty
@@ -17,6 +18,8 @@ data Value =
     | Mod Value Value
     | Number Integer
     | ID String
+    | Pair (Value, Value)
+    | Args [Value]
     | Other Value Value deriving (Show, Eq)
 
 type Op = String
@@ -42,7 +45,11 @@ myEval (Cons a b) c
     where emptyMyEval a = myEval a ""
 myEval (Leaf a b) _
     | all isDigit b = Number (read b :: Integer)
-    | otherwise = ID b
+    | otherwise =
+        if length splitedString == 1
+           then ID b
+           else Pair (ID (head splitedString), Args (map (\x -> Pair (ID x, Eval.Empty)) $ tail splitedString))
+        where splitedString = splitOn " " b
 myEval _ _ = ID ""
 
 performEval :: Cell -> Value
