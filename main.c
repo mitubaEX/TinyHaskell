@@ -20,9 +20,38 @@ Cell *cons(Cell *car, Cell *cdr) {
 	return(pointer);
 }
 
-Cell *cons_func(Cell *car, Cell *args, Cell *cdr) {
+Cell *cons_lfunc(Cell *car, Cell *args, Cell *cdr) {
 	// set args
 	car->args = args;
+
+	Cell *pointer;
+
+	pointer = (Cell *)malloc(sizeof(Cell));
+	pointer->kind = CONS;
+	pointer->head = car;
+	pointer->tail = cdr;
+	pointer->args = NULL;
+	return(pointer);
+}
+
+Cell *cons_rfunc(Cell *car, Cell *cdr, Cell *args) {
+	// set args
+	cdr->args = args;
+
+	Cell *pointer;
+
+	pointer = (Cell *)malloc(sizeof(Cell));
+	pointer->kind = CONS;
+	pointer->head = car;
+	pointer->tail = cdr;
+	pointer->args = NULL;
+	return(pointer);
+}
+
+Cell *cons_func_asign_func(Cell *car, Cell *args, Cell *cdr, Cell *cdr_args) {
+	// set args
+	car->args = args;
+	cdr->args = cdr_args;
 
 	Cell *pointer;
 
