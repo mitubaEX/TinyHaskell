@@ -1,4 +1,4 @@
-import           CellTree
+import           Cell
 import           Data.List          (isPrefixOf)
 import           Data.List.Split    (splitOn)
 import           Data.Text          (dropWhileEnd, pack, strip, unpack)
@@ -15,7 +15,7 @@ main = do
   print $ map (strip . pack) $ splitOn "-----------------------------\n" fileBody
   print $ map performTraverse (splitOn "-----------------------------\n" fileBody)
   let a = map performTraverse (splitOn "-----------------------------\n" fileBody)
-  let valList = map performEval $ filter (/= CellTree.Empty) a
+  let valList = map performEval $ filter (/= Cell.Empty) a
   print valList
 
   let resultList = performRun valList

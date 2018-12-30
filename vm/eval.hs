@@ -4,7 +4,7 @@ module Eval (
     Value(..)
     ) where
 
-import           CellTree
+import           Cell
 import           Control.Monad.State
 import           Data.Char
 import           Data.List.Split     (splitOn)

@@ -1,4 +1,4 @@
-module CellTree (
+module Cell (
     Cell(..)
     ) where
 

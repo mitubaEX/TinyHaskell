@@ -3,7 +3,7 @@ module Parser (
     performTraverse,
     ) where
 
-import           CellTree
+import           Cell
 import           Data.List       (isPrefixOf)
 import           Data.List.Split (splitOn)
 import           Data.Text       (dropWhileEnd, pack, strip, unpack)
