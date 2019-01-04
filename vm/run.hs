@@ -1,5 +1,4 @@
 module Run (
-    myRun,
     performRun,
     findFunction,
     ValList,
@@ -23,17 +22,17 @@ getVal :: Value -> Value
 getVal (Function a b) = b
 getVal _              = ID ""
 
-filterValues :: (Value -> Bool) -> [Value] -> [Value]
-filterValues a (x:xs)
-    | a x = if isID $ getVal x then filterValues (`eqID` getVal x) xs ++ filterValues a xs else getVal x : filterValues a xs
-    | otherwise = filterValues a xs
-filterValues a [] = []
+filterValues :: (Value -> Bool) -> [Value] -> [Value] -> [Value]
+filterValues a (x:xs) xss
+    | a x =
+        if isID $ getVal x
+           then filterValues (`eqID` getVal x) xss xss ++ filterValues a xs xss
+           else getVal x : filterValues a xs xss
+    | otherwise = filterValues a xs xss
+filterValues a [] _ = []
 
 findFunction :: ValList -> Value -> ResultList
-findFunction a b = filterValues (`eqID` b) a
-
-myRun :: [Value] -> Value -> [Value]
-myRun = findFunction
+findFunction a b = filterValues (`eqID` b) a a
 
 performRun :: ValList -> ResultList
 performRun a = map last $ filter (not . null) $ map (findFunction a) a
