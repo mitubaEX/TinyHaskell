@@ -4,6 +4,7 @@ import           Data.List.Split    (splitOn)
 import           Data.Text          (dropWhileEnd, pack, strip, unpack)
 import           Eval
 import           Parser
+import           Replace
 import           Run
 import           System.Environment (getArgs)
 
@@ -20,3 +21,6 @@ main = do
 
   let resultList = performRun valList
   print resultList
+
+  let replaceReusltFunction = replaceFunction valList resultList
+  print replaceReusltFunction

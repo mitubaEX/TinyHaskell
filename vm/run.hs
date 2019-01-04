@@ -1,9 +1,15 @@
 module Run (
     myRun,
     performRun,
+    findFunction,
+    ValList,
+    ResultList
     ) where
 
 import           Eval
+
+type ValList = [Value]
+type ResultList = [Value]
 
 eqID :: Value -> Value -> Bool
 eqID (Function (ID a) _) (ID b) = a == b
@@ -19,11 +25,11 @@ filterValues a (x:xs)
     | otherwise = filterValues a xs
 filterValues a [] = []
 
-findFunction :: [Value] -> Value -> [Value]
+findFunction :: ValList -> Value -> ResultList
 findFunction a b = filterValues (`eqID` b) a
 
 myRun :: [Value] -> Value -> [Value]
 myRun = findFunction
 
-performRun :: [Value] -> [Value]
-performRun a = map last $ filter (not . null) $ map (myRun a) a
+performRun :: ValList -> ResultList
+performRun a = map last $ filter (not . null) $ map (findFunction a) a
