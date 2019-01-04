@@ -39,7 +39,3 @@ $(YACC): $(SYNS) $(LEXC) $(DEFS)
 
 clean:
 	-rm -f $(TARGET)* $(OBJS) $(LEXC) $(YACC) $(TMP) *\~
-
-src: all
-	./$(TARGET) < $(SRC) > $(TMP)
-	cat $(TMP)
