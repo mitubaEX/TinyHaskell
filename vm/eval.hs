@@ -12,6 +12,7 @@ import           Data.List.Split     (splitOn)
 data Value =
     Empty
     | Function Value Value
+    | Call Value Value
     | Add Value Value
     | Minus Value Value
     | Div Value Value
@@ -31,12 +32,14 @@ addM _ _               = Just 0
 myEval :: Cell -> Op -> Value
 myEval (Node a b) _
     | a == "=" = myEval b "="
+    | a == "CALL" = myEval b "CALL"
     | a == "+" = myEval b a
     | a == "-" = myEval b a
     | a == "/" = myEval b a
     | a == "%" = myEval b a
 myEval (Cons a b) c
     | c == "=" = Function (emptyMyEval a) (emptyMyEval b)
+    | c == "CALL" = Call (emptyMyEval a) (emptyMyEval b)
     | c == "+" = Add (emptyMyEval a) (emptyMyEval b)
     | c == "-" = Minus (emptyMyEval a) (emptyMyEval b)
     | c == "/" = Div (emptyMyEval a) (emptyMyEval b)

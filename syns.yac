@@ -13,8 +13,12 @@ Statements
 Statement
 	: Declare SEMICOLON		{ $$ = $1; }
 	| Assign SEMICOLON		{ $$ = $1; }
+	| Call SEMICOLON		{ $$ = $1; }
 	| Expressions SEMICOLON		{ $$ = $1; }
 	| Print SEMICOLON		{ $$ = $1; }
+Call
+	: SimpleFactor { $$ = $1; }
+	| Call SimpleFactor { $$ = node("CALL", cons($1, $2)); }
 Declare
 	: Type Variables		{ $$ = node("TYPE", cons($1, $2)); }
 Type
@@ -51,6 +55,9 @@ Factor
 	: Variable			{ $$ = $1; }
 	| Constant			{ $$ = $1; }
 	| LPAR Expression RPAR		{ $$ = $2; }
+SimpleFactor
+	: Variable			{ $$ = $1; }
+	| Constant			{ $$ = $1; }
 Variable
 	: ID				{ $$ = leaf("ID", yytext); }
 Constant
