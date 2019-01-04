@@ -13,8 +13,8 @@ main = do
   fileBody <- if length args < 1
     then getContents
     else readFile $ head args
-  print $ map (strip . pack) $ splitOn "-----------------------------\n" fileBody
-  print $ map performTraverse (splitOn "-----------------------------\n" fileBody)
+  -- print $ map (strip . pack) $ splitOn "-----------------------------\n" fileBody
+  -- print $ map performTraverse (splitOn "-----------------------------\n" fileBody)
   let a = map performTraverse (splitOn "-----------------------------\n" fileBody)
   let valList = map performEval $ filter (/= Cell.Empty) a
   print valList
