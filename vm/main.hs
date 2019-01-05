@@ -35,11 +35,5 @@ main = do
   let calls = callsList valList
   print calls
 
-  -- let resultList = performRun valList
-  -- print resultList
-
-  let result = otherRun functionMap calls
+  let result = performRun functionMap calls
   print result
-
-  -- let replaceReusltFunction = replaceFunction valList resultList
-  -- print replaceReusltFunction
