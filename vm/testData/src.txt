@@ -1,5 +1,0 @@
-
-    node(TYPE
-        cons(
-            leaf(INT int)
-            leaf(ID t)))
