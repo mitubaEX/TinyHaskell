@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
 
 make
 cd vm/ && make

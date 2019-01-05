@@ -11,32 +11,20 @@ Statements
 	: Statement			{ $$ = $1; tree($$); }
 	| Statements Statement		{ $$ = $2; tree($$); }
 Statement
-	: Declare SEMICOLON		{ $$ = $1; }
-	| Assign SEMICOLON		{ $$ = $1; }
+	: Assign SEMICOLON		{ $$ = $1; }
 	| Call SEMICOLON		{ $$ = $1; }
 	| Expressions SEMICOLON		{ $$ = $1; }
-	| Print SEMICOLON		{ $$ = $1; }
 Call
-	: SimpleFactor { $$ = $1; }
-	| Call SimpleFactor { $$ = node("CALL", cons($1, $2)); }
-Declare
-	: Type Variables		{ $$ = node("TYPE", cons($1, $2)); }
-Type
-	: INT				{ $$ = leaf("INT", yytext); }
-	| FLOAT				{ $$ = leaf("FLOAT", yytext); }
-Variables
-	: Variable			{ $$ = $1; }
-	| Variables COMMA Variable	{ $$ = node(",", cons($1, $3)); }
+	: Factor { $$ = $1; }
+	| Call Factor { $$ = node("CALL", cons($1, $2)); }
 Assign
 	: Variable EQUAL Expression	{ $$ = node("=", cons($1, $3)); }
 	| Variable EQUAL Variable Factors	{ $$ = node("=", cons_rfunc($1, $3, $4)); }
 	| Variable Arguments EQUAL Expression	{ $$ = node("=", cons_lfunc($1, $2, $4)); }
 	| Variable Arguments EQUAL Variable Arguments	{ $$ = node("=", cons_func_asign_func($1, $2, $4, $5)); }
 Arguments
-	: Variable { $$ = $1; }
-	| Arguments Variable { $$ = node(",", cons($1, $2)); }
-Print
-	: PRINT Expressions		{ $$ = node("PRINT", $2); }
+	: Factor { $$ = $1; }
+	| Arguments Factor { $$ = node(",", cons($1, $2)); }
 Expressions
 	: Expression			{ $$ = $1; }
 	| Expressions COMMA Expression	{ $$ = node(",", cons($1, $3)); }
@@ -55,9 +43,6 @@ Factor
 	: Variable			{ $$ = $1; }
 	| Constant			{ $$ = $1; }
 	| LPAR Expression RPAR		{ $$ = $2; }
-SimpleFactor
-	: Variable			{ $$ = $1; }
-	| Constant			{ $$ = $1; }
 Variable
 	: ID				{ $$ = leaf("ID", yytext); }
 Constant
