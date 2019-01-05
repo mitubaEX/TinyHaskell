@@ -16,7 +16,7 @@ Statement
 	| Expressions SEMICOLON		{ $$ = $1; }
 Call
 	: Factors { $$ = $1; }
-	| Variable Factors { $$ = node("CALL", cons($1, $2)); }
+	| Variable Arguments { $$ = node("CALL", cons($1, $2)); }
 	| Call Factors { $$ = node("CALL", cons($1, $2)); }
 Assign
 	: Variable EQUAL Expression	{ $$ = node("=", cons($1, $3)); }

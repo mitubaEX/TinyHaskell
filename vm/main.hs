@@ -18,7 +18,11 @@ main = do
     else readFile $ head args
   -- print $ map (strip . pack) $ splitOn "-----------------------------\n" fileBody
   -- print $ map performTraverse (splitOn "-----------------------------\n" fileBody)
-  let a = map performTraverse (splitOn "-----------------------------\n" fileBody)
+  let contents = splitOn "-----------------------------\n" fileBody
+  let a = map performTraverse contents
+
+  -- print $ map otherTraverse contents
+
   let valList = map performEval $ filter (/= Cell.Empty) a
   print valList
 
@@ -33,6 +37,9 @@ main = do
 
   let resultList = performRun valList
   print resultList
+
+  let r = otherRun m calls
+  print r
 
   let replaceReusltFunction = replaceFunction valList resultList
   print replaceReusltFunction

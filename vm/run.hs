@@ -2,10 +2,13 @@ module Run (
     performRun,
     findFunction,
     ValList,
-    ResultList
+    ResultList,
+    otherRun
     ) where
 
+import qualified Data.Map  as Map
 import           Eval
+import           Functions
 
 type ValList = [Value]
 type ResultList = [Value]
@@ -36,3 +39,13 @@ findFunction a b = filterValues (`eqID` b) a a
 
 performRun :: ValList -> ResultList
 performRun a = map last $ filter (not . null) $ map (findFunction a) a
+
+unpackMaybeVal :: Maybe Value -> Value
+unpackMaybeVal (Just a) = a
+unpackMaybeVal _        = Eval.Empty
+
+getValFromMap :: FunctionMap -> Value -> Maybe Value
+getValFromMap a b = Map.lookup b a
+
+otherRun :: FunctionMap -> ValList -> ResultList
+otherRun a = map (unpackMaybeVal . getValFromMap a)
