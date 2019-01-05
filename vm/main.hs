@@ -1,8 +1,10 @@
+import           Calls
 import           Cell
 import           Data.List          (isPrefixOf)
 import           Data.List.Split    (splitOn)
 import           Data.Text          (dropWhileEnd, pack, strip, unpack)
 import           Eval
+import           Functions
 import           Parser
 import           Replace
 import           Run
@@ -18,6 +20,12 @@ main = do
   let a = map performTraverse (splitOn "-----------------------------\n" fileBody)
   let valList = map performEval $ filter (/= Cell.Empty) a
   print valList
+
+  let functions = functionList valList
+  print functions
+
+  let calls = callsList valList
+  print calls
 
   let resultList = performRun valList
   print resultList

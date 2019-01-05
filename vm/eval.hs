@@ -15,6 +15,7 @@ data Value =
     | Call Value Value
     | Add Value Value
     | Minus Value Value
+    | Multi Value Value
     | Div Value Value
     | Mod Value Value
     | Number Integer
@@ -35,6 +36,8 @@ myEval (Node a b) _
     | a == "CALL" = myEval b "CALL"
     | a == "+" = myEval b a
     | a == "-" = myEval b a
+    | a == "*" = myEval b a
+    | a == "," = myEval b a
     | a == "/" = myEval b a
     | a == "%" = myEval b a
 myEval (Cons a b) c
@@ -42,6 +45,8 @@ myEval (Cons a b) c
     | c == "CALL" = Call (emptyMyEval a) (emptyMyEval b)
     | c == "+" = Add (emptyMyEval a) (emptyMyEval b)
     | c == "-" = Minus (emptyMyEval a) (emptyMyEval b)
+    | c == "*" = Multi (emptyMyEval a) (emptyMyEval b)
+    | c == "," = Args [emptyMyEval a, emptyMyEval b]
     | c == "/" = Div (emptyMyEval a) (emptyMyEval b)
     | c == "%" = Mod (emptyMyEval a) (emptyMyEval b)
     | otherwise = Other (emptyMyEval a) (emptyMyEval b)
@@ -51,7 +56,7 @@ myEval (Leaf a b) _
     | otherwise =
         if length splitedString == 1
            then ID b
-           else Pair (ID (head splitedString), Args (map (\x -> Pair (ID x, Eval.Empty)) $ tail splitedString))
+           else Pair (ID (head splitedString), Args (map ID $ tail splitedString))
         where splitedString = splitOn " " b
 myEval _ _ = ID ""
 
