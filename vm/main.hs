@@ -2,6 +2,7 @@ import           Calls
 import           Cell
 import           Data.List          (isPrefixOf)
 import           Data.List.Split    (splitOn)
+import qualified Data.Map           as Map
 import           Data.Text          (dropWhileEnd, pack, strip, unpack)
 import           Eval
 import           Functions
@@ -23,6 +24,9 @@ main = do
 
   let functions = functionList valList
   print functions
+
+  let m = list2Map functions
+  print m
 
   let calls = callsList valList
   print calls

@@ -22,7 +22,7 @@ data Value =
     | ID String
     | Pair (Value, Value)
     | Args [Value]
-    | Other Value Value deriving (Show, Eq)
+    | Other Value Value deriving (Show, Eq, Ord)
 
 type Op = String
 
