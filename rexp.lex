@@ -16,6 +16,7 @@ int linecounter = 1;
 "-"					{ return(SUBTRACT); }
 "*"					{ return(MULTIPLY); }
 "/"					{ return(DIVIDE); }
+"%"					{ return(MOD); }
 "("					{ return(LPAR); }
 ")"					{ return(RPAR); }
 "\n"					{ linecounter++; }

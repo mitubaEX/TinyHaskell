@@ -3,7 +3,7 @@
 #define YYSTYPE Cell *
 %}
 %token	ID INTEGER REAL INT FLOAT PRINT SEMICOLON COMMA
-	EQUAL ADD SUBTRACT MULTIPLY DIVIDE LPAR RPAR UNKNOWN;
+	EQUAL ADD SUBTRACT MULTIPLY DIVIDE MOD LPAR RPAR UNKNOWN;
 %%
 Program
 	: Statements			{ $$ = $1; }
@@ -38,8 +38,10 @@ Expression
 Term
 	: Term MULTIPLY Factor		{ $$ = node("*", cons($1, $3)); }
 	| Term DIVIDE Factor		{ $$ = node("/", cons($1, $3)); }
+	| Term MOD Factor		{ $$ = node("%", cons($1, $3)); }
 	| Term MULTIPLY Call		{ $$ = node("*", cons($1, $3)); }
 	| Term DIVIDE Call		{ $$ = node("/", cons($1, $3)); }
+	| Term MOD Call		{ $$ = node("%", cons($1, $3)); }
 	| Factor			{ $$ = $1; }
 Factors
 	: Factor { $$ = $1; }
