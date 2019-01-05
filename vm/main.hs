@@ -29,17 +29,17 @@ main = do
   let functions = functionList valList
   print functions
 
-  let m = list2Map functions
-  print m
+  let functionMap = list2Map functions
+  print functionMap
 
   let calls = callsList valList
   print calls
 
-  let resultList = performRun valList
-  print resultList
+  -- let resultList = performRun valList
+  -- print resultList
 
-  let r = otherRun m calls
-  print r
+  let result = otherRun functionMap calls
+  print result
 
-  let replaceReusltFunction = replaceFunction valList resultList
-  print replaceReusltFunction
+  -- let replaceReusltFunction = replaceFunction valList resultList
+  -- print replaceReusltFunction

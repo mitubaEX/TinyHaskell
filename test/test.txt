@@ -17,6 +17,11 @@ b = 1; a = b; y = a; y;
 
 y a = 1;y 1;
 y = a + 1;a = 1;y;
+y = a - 1;a = 1;y;
+y = a * 1;a = 1;y;
+y = a / 1;a = 1;y;
+y = a % 1;a = 1;y;
+
 y a = a + 1;y 1;
-y a b = a + 1 + b;y 1 1;
-y a b = 2 + a + 1 + b;y 1 1;
+y a b = a + (1 + b);y 1 1;
+y a b = 2 + a + (1 + b);y 1 1;
