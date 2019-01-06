@@ -21,8 +21,6 @@ main = do
   let contents = splitOn "-----------------------------\n" fileBody
   let a = map performTraverse contents
 
-  -- print $ map otherTraverse contents
-
   let valList = map performEval $ filter (/= Cell.Empty) a
   print valList
 
