@@ -16,31 +16,33 @@ unpackMaybeVal (Just a) = a
 unpackMaybeVal _        = Eval.Empty
 
 -- (Number or ID) -> (ID) -> Value
-replaceIDVal :: Value -> Value -> Value -> Value
+replaceIDVal :: FunctionMap -> Value -> Value -> Value -> Value
 -- ID
 -- TODO: ID local or global scope
-replaceIDVal (Number a) (ID b) (ID c)
+replaceIDVal _ (Number a) (ID b) (ID c)
   | b == c = Number a
   | otherwise = ID c
 
 -- Call
--- replaceIDVal (Number a) (ID b) (Call (ID b) (ID c)) =
+replaceIDVal fs (Number a) (ID b) (Call (ID c) (ID d)) = getValFromMap fs (Call (ID c) (ID d))
+replaceIDVal fs (Number a) (ID b) (Call (ID c) (Number d)) = getValFromMap fs (Call (ID c) (Number d))
+replaceIDVal fs (Number a) (ID b) (Call (ID c) (Args d)) = getValFromMap fs (Call (ID c) (Args d))
 
-replaceIDVal a b (Add c d) = Add (replaceIDVal a b c) (replaceIDVal a b d)
-replaceIDVal a b (Minus c d) = Minus (replaceIDVal a b c) (replaceIDVal a b d)
-replaceIDVal a b (Multi c d) = Multi (replaceIDVal a b c) (replaceIDVal a b d)
-replaceIDVal a b (Div c d) = Div (replaceIDVal a b c) (replaceIDVal a b d)
-replaceIDVal a b (Mod c d) = Mod (replaceIDVal a b c) (replaceIDVal a b d)
-replaceIDVal a b c = c
+replaceIDVal fs a b (Add c d) = Add (replaceIDVal fs a b c) (replaceIDVal fs a b d)
+replaceIDVal fs a b (Minus c d) = Minus (replaceIDVal fs a b c) (replaceIDVal fs a b d)
+replaceIDVal fs a b (Multi c d) = Multi (replaceIDVal fs a b c) (replaceIDVal fs a b d)
+replaceIDVal fs a b (Div c d) = Div (replaceIDVal fs a b c) (replaceIDVal fs a b d)
+replaceIDVal fs a b (Mod c d) = Mod (replaceIDVal fs a b c) (replaceIDVal fs a b d)
+replaceIDVal fs a b c = c
 
 
 
 -- Call(Pair) -> Key(Pair) -> Value with Key
-applyArgs :: Value -> Value -> Value -> Value
-applyArgs (Pair (ID a, Args (x:xs))) (Pair (ID c, Args (y:ys))) e =
-    applyArgs (Pair (ID a, Args xs)) (Pair (ID c, Args ys)) replacedVal
-        where replacedVal = replaceIDVal x y e
-applyArgs (Pair (ID a, Args [])) (Pair (ID c, Args [])) e = e
+applyArgs :: FunctionMap -> Value -> Value -> Value -> Value
+applyArgs fs (Pair (ID a, Args (x:xs))) (Pair (ID c, Args (y:ys))) e =
+    applyArgs fs (Pair (ID a, Args xs)) (Pair (ID c, Args ys)) replacedVal
+        where replacedVal = replaceIDVal fs x y e
+applyArgs _ (Pair (ID a, Args [])) (Pair (ID c, Args [])) e = e
 
 filterKeys :: Value -> Value -> Bool
 filterKeys (Pair (ID a, Args b)) (Pair (ID c, Args d)) = a == c && length b == length d
@@ -50,7 +52,7 @@ filterKeys _ _ = False
 getSameArgsFunction :: FunctionMap -> Value -> Value
 getSameArgsFunction a b =
     if not (null filteredKeyList)
-       then applyArgs b filteredKey (unpackMaybeVal $ Map.lookup filteredKey a)
+       then applyArgs a b filteredKey (unpackMaybeVal $ Map.lookup filteredKey a)
        else Eval.Empty
            where filteredKeyList = filter (filterKeys b) $ Map.keys a
                  filteredKey = head filteredKeyList
