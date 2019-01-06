@@ -32,6 +32,8 @@ Expressions
 Expression
 	: Expression ADD Term		{ $$ = node("+", cons($1, $3)); }
 	| Expression SUBTRACT Term	{ $$ = node("-", cons($1, $3)); }
+	| Call ADD Call		{ $$ = node("+", cons($1, $3)); }
+	| Call SUBTRACT Call	{ $$ = node("-", cons($1, $3)); }
 	| Expression ADD Call		{ $$ = node("+", cons($1, $3)); }
 	| Expression SUBTRACT Call	{ $$ = node("-", cons($1, $3)); }
 	| Term				{ $$ = $1; }
@@ -39,6 +41,8 @@ Term
 	: Term MULTIPLY Factor		{ $$ = node("*", cons($1, $3)); }
 	| Term DIVIDE Factor		{ $$ = node("/", cons($1, $3)); }
 	| Term MOD Factor		{ $$ = node("%", cons($1, $3)); }
+	| Call MULTIPLY Call		{ $$ = node("*", cons($1, $3)); }
+	| Call DIVIDE Call		{ $$ = node("/", cons($1, $3)); }
 	| Term MULTIPLY Call		{ $$ = node("*", cons($1, $3)); }
 	| Term DIVIDE Call		{ $$ = node("/", cons($1, $3)); }
 	| Term MOD Call		{ $$ = node("%", cons($1, $3)); }
