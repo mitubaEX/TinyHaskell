@@ -26,9 +26,10 @@ data Value =
 
 type Op = String
 
-addM :: Num a => Maybe a -> Maybe a -> Maybe a
-addM (Just a) (Just b) = Just $ a + b
-addM _ _               = Just 0
+parseStr2Value :: String -> Value
+parseStr2Value a
+  | all isDigit a = Number (read a :: Integer)
+  | otherwise = ID a
 
 myEval :: Cell -> Op -> Value
 myEval (Node a b) _
@@ -55,8 +56,8 @@ myEval (Leaf a b) _
     | all isDigit b = Number (read b :: Integer)
     | otherwise =
         if length splitedString == 1
-           then ID b
-           else Pair (ID (head splitedString), Args (map ID $ tail splitedString))
+           then parseStr2Value b
+           else Pair (parseStr2Value (head splitedString), Args (map parseStr2Value $ tail splitedString))
         where splitedString = splitOn " " b
 myEval _ _ = ID ""
 

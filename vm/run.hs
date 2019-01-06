@@ -4,7 +4,8 @@ module Run (
     ResultList
     ) where
 
-import qualified Data.Map  as Map
+import qualified Data.Map   as Map
+import           Data.Maybe
 import           Eval
 import           Functions
 
@@ -15,6 +16,14 @@ unpackMaybeVal :: Maybe Value -> Value
 unpackMaybeVal (Just a) = a
 unpackMaybeVal _        = Eval.Empty
 
+runOperator :: Value -> Value
+runOperator (Add (Number a) (Number b))   = Number (a + b)
+runOperator (Minus (Number a) (Number b)) = Number (a - b)
+runOperator (Multi (Number a) (Number b)) = Number (a * b)
+runOperator (Div (Number a) (Number b))   = Number (a `div` b)
+runOperator (Mod (Number a) (Number b))   = Number (a `mod` b)
+runOperator a                             = a
+
 -- (Number or ID) -> (ID) -> Value
 replaceIDVal :: FunctionMap -> Value -> Value -> Value -> Value
 -- ID
@@ -24,18 +33,15 @@ replaceIDVal _ (Number a) (ID b) (ID c)
   | otherwise = ID c
 
 -- Call
-replaceIDVal fs (Number a) (ID b) (Call (ID c) (ID d)) = getValFromMap fs (Call (ID c) (ID d))
-replaceIDVal fs (Number a) (ID b) (Call (ID c) (Number d)) = getValFromMap fs (Call (ID c) (Number d))
-replaceIDVal fs (Number a) (ID b) (Call (ID c) (Args d)) = getValFromMap fs (Call (ID c) (Args d))
+replaceIDVal fs a b (Call c d) = getValFromMap fs (Call c (runOperator $ replaceIDVal fs a b d))
 
+-- Each operator
 replaceIDVal fs a b (Add c d) = Add (replaceIDVal fs a b c) (replaceIDVal fs a b d)
 replaceIDVal fs a b (Minus c d) = Minus (replaceIDVal fs a b c) (replaceIDVal fs a b d)
 replaceIDVal fs a b (Multi c d) = Multi (replaceIDVal fs a b c) (replaceIDVal fs a b d)
 replaceIDVal fs a b (Div c d) = Div (replaceIDVal fs a b c) (replaceIDVal fs a b d)
 replaceIDVal fs a b (Mod c d) = Mod (replaceIDVal fs a b c) (replaceIDVal fs a b d)
 replaceIDVal fs a b c = c
-
-
 
 -- Call(Pair) -> Key(Pair) -> Value with Key
 applyArgs :: FunctionMap -> Value -> Value -> Value -> Value
@@ -44,8 +50,12 @@ applyArgs fs (Pair (ID a, Args (x:xs))) (Pair (ID c, Args (y:ys))) e =
         where replacedVal = replaceIDVal fs x y e
 applyArgs _ (Pair (ID a, Args [])) (Pair (ID c, Args [])) e = e
 
+isNumber :: Value -> Bool
+isNumber (Number a) = False
+isNumber _          = True
+
 filterKeys :: Value -> Value -> Bool
-filterKeys (Pair (ID a, Args b)) (Pair (ID c, Args d)) = a == c && length b == length d
+filterKeys (Pair (ID a, Args b)) (Pair (ID c, Args d)) = a == c && length b == length d && all isNumber d
 filterKeys _ _ = False
 
 -- Get keys of FunctionMap and apply args to function.
@@ -64,9 +74,11 @@ getValFromMap a (ID b) = getValFromMap a (unpackMaybeVal $ Map.lookup (ID b) a)
 
 -- Call
 getValFromMap a (Call (ID b) (ID c)) = getValFromMap a (getSameArgsFunction a (Pair (ID b, Args [ID c])))
-getValFromMap a (Call (ID b) (Number c)) = getValFromMap a (getSameArgsFunction a (Pair (ID b, Args [Number c])))
+getValFromMap a (Call (ID b) (Number c))
+  | isJust lookupedVal = unpackMaybeVal lookupedVal
+  | otherwise = getValFromMap a (getSameArgsFunction a (Pair (ID b, Args [Number c])))
+  where lookupedVal = Map.lookup (Pair (ID b, Args [Number c])) a
 getValFromMap a (Call (ID b) (Args c)) = getValFromMap a (getSameArgsFunction a (Pair (ID b, Args c)))
--- getValFromMap a (Call (ID b) (Args c)) = getValFromMap a (unpackMaybeVal $ Map.lookup (ID b) a)
 
 -- Add
 getValFromMap a (Add (ID b) (ID c)) = Add (getValFromMap a (unpackMaybeVal $ Map.lookup (ID b) a)) (getValFromMap a (unpackMaybeVal $ Map.lookup (ID c) a))
