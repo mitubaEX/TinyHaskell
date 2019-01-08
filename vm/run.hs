@@ -1,7 +1,8 @@
 module Run (
     performRun,
     ValList,
-    ResultList
+    ResultList,
+    runOperator
     ) where
 
 import qualified Data.Map   as Map
@@ -18,10 +19,24 @@ unpackMaybeVal _        = Eval.Empty
 
 runOperator :: Value -> Value
 runOperator (Add (Number a) (Number b))   = Number (a + b)
+runOperator (Add a (Number b))            = runOperator $ Add (runOperator a) (Number b)
+runOperator (Add (Number a) b)            = runOperator $ Add (Number a) (runOperator b)
+
 runOperator (Minus (Number a) (Number b)) = Number (a - b)
+runOperator (Minus a (Number b))            = runOperator $ Minus (runOperator a) (Number b)
+runOperator (Minus (Number a) b)            = runOperator $ Minus (Number a) (runOperator b)
+
 runOperator (Multi (Number a) (Number b)) = Number (a * b)
+runOperator (Multi a (Number b))            = runOperator $ Multi (runOperator a) (Number b)
+runOperator (Multi (Number a) b)            = runOperator $ Multi (Number a) (runOperator b)
+
 runOperator (Div (Number a) (Number b))   = Number (a `div` b)
+runOperator (Div a (Number b))            = runOperator $ Div (runOperator a) (Number b)
+runOperator (Div (Number a) b)            = runOperator $ Div (Number a) (runOperator b)
+
 runOperator (Mod (Number a) (Number b))   = Number (a `mod` b)
+runOperator (Mod a (Number b))            = runOperator $ Mod (runOperator a) (Number b)
+runOperator (Mod (Number a) b)            = runOperator $ Mod (Number a) (runOperator b)
 runOperator a                             = a
 
 -- (Number or ID) -> (ID) -> Value

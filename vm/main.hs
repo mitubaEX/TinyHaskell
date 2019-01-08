@@ -7,7 +7,7 @@ import           Data.Text          (dropWhileEnd, pack, strip, unpack)
 import           Eval
 import           Functions
 import           Parser
-import           Replace
+import           Printer
 import           Run
 import           System.Environment (getArgs)
 
@@ -35,3 +35,5 @@ main = do
 
   let result = performRun functionMap calls
   print result
+
+  mapM performPrint result
