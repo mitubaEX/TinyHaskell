@@ -9,8 +9,8 @@ do
   if [ "$i" != "" ]
   then
     echo "testData is \"$i\""
-    echo $i | ./tree
-    echo $i | ./tree | vm/main
+    echo $i | ./compiler
+    echo $i | ./compiler | vm/main
     echo
   fi
 done

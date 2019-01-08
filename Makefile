@@ -1,4 +1,4 @@
-TARGET	= tree
+TARGET	= compiler
 
 # LINK (*.o)
 LD	= cc
