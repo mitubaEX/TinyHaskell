@@ -1,4 +1,6 @@
-# tinyHaskell
+# TinyHaskell
+
+TinyHaskell is a programming language for practice of Haskell.
 
 ## Usage
 
@@ -12,10 +14,14 @@ make
 make
 ```
 
-Run!
+Note: require [Stack](https://docs.haskellstack.org/en/stable/README/) for build. And add following alias to your config file.
+
+`alias ghc='stack ghc --'`
+
+### Run!
 
 ```
-echo "y=1;y" | ./compiler | ./vm/main
+echo "y=1;y;" | ./compiler | ./vm/main
 ```
 
 ## Interpreter
@@ -29,7 +35,7 @@ chmod +x ./interpreter/interpreter.sh
 
 ### basic function
 
-```
+```sh
 # no args
 y = 1; y;
 result:
@@ -53,4 +59,4 @@ result:
 120
 ```
 
-Not support multiple args.
+**Not support multiple args.**
