@@ -71,6 +71,8 @@ parseOperator :: Parser Value
 parseOperator = try $ do
     head <- try (spaces >> parseNumber)
         <|> try parseNumber
+        <|> try (spaces >> parseCall)
+        <|> parseCall
         <|> try (spaces >> parseID)
         <|> parseID
     op <- try (spaces >> operator) <|> operator
@@ -91,6 +93,8 @@ parseParenOperator = try $ do
     char '('
     head <- try (spaces >> parseNumber)
         <|> try parseNumber
+        <|> try (spaces >> parseCall)
+        <|> parseCall
         <|> try (spaces >> parseID)
         <|> parseID
     op <- try (spaces >> operator) <|> operator
