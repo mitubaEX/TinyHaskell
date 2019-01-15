@@ -15,6 +15,11 @@ data LispVal = Atom String
              | Number Integer
              | String String
              | ID String
+             | Add LispVal LispVal
+             | Minus LispVal LispVal
+             | Multi LispVal LispVal
+             | Mod LispVal LispVal
+             | Div LispVal LispVal
              | Bool Bool deriving (Show)
 
 parseString :: Parser LispVal
@@ -64,7 +69,15 @@ parseOperator = try $ do
     op <- try (spaces >> operator) <|> operator
     tail <- try (spaces >> parseExpr)
         <|> parseExpr
-    return $ Binary op head tail
+    if op == '+'
+       then return $ Add head tail
+       else if op == '-'
+       then return $ Minus head tail
+       else if op == '*'
+       then return $ Multi head tail
+       else if op == '/'
+       then return $ Div head tail
+       else return $ Mod head tail
 
 parseParenOperator :: Parser LispVal
 parseParenOperator = try $ do
@@ -77,7 +90,15 @@ parseParenOperator = try $ do
     tail <- try (spaces >> parseExpr)
         <|> parseExpr
     char ')'
-    return $ Binary op head tail
+    if op == '+'
+       then return $ Add head tail
+       else if op == '-'
+       then return $ Minus head tail
+       else if op == '*'
+       then return $ Multi head tail
+       else if op == '/'
+       then return $ Div head tail
+       else return $ Mod head tail
 
 parseFunction :: Parser LispVal
 parseFunction = try $ do
