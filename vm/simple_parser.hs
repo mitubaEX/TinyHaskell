@@ -122,5 +122,5 @@ spaces = skipMany1 space
 
 main :: IO ()
 main = do
-         (expr:_) <- getArgs
-         putStrLn (readExpr expr)
+         expr <- getContents
+         print (map readExpr $ filter (not . null) $ splitOn "\n" expr)
