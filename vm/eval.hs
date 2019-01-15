@@ -20,9 +20,11 @@ data Value =
     | Mod Value Value
     | Number Integer
     | ID String
+    | String String
     | Pair (Value, Value)
     | Args [Value]
-    | Other Value Value deriving (Show, Eq, Ord)
+    | Other Value Value
+    | Err String deriving (Show, Eq, Ord)
 
 type Op = String
 

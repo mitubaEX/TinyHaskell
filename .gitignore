@@ -6,3 +6,4 @@ y.tab.o
 *.o
 *.hi
 **/main
+**/simple_parser

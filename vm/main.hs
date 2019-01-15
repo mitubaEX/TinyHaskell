@@ -9,6 +9,7 @@ import           Functions
 import           Parser
 import           Printer
 import           Run
+import           SimpleParser
 import           System.Environment (getArgs)
 
 main = do
@@ -18,23 +19,28 @@ main = do
     else readFile $ head args
   -- print $ map (strip . pack) $ splitOn "-----------------------------\n" fileBody
   -- print $ map performTraverse (splitOn "-----------------------------\n" fileBody)
-  let contents = splitOn "-----------------------------\n" fileBody
-  let a = map performTraverse contents
+  --
+  -- let contents = splitOn "-----------------------------\n" fileBody
 
-  let valList = map performEval $ filter (/= Cell.Empty) a
-  -- print valList
+  let contents = splitOn "\n" fileBody
+  let valList = map readExpr $ filter (not . null) contents
+  --
+  -- let a = map performTraverse $ filter (not . null) contents
+
+  -- let valList = map performEval $ filter (/= Cell.Empty) a
+  print valList
 
   let functions = functionList valList
-  -- print functions
+  print functions
 
   let functionMap = list2Map functions
-  -- print functionMap
+  print functionMap
 
   let calls = callsList valList
-  -- print calls
+  print calls
 
   let result = performRun functionMap calls
-  -- print result
+  print result
 
   putStrLn "result:"
   mapM performPrint result
