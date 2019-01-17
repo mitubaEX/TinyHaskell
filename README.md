@@ -7,10 +7,6 @@ TinyHaskell is a programming language for practice of Haskell.
 Please build.
 
 ```
-# in top level
-make
-
-# in vm dir
 make
 ```
 
@@ -21,14 +17,7 @@ Note: require [Stack](https://docs.haskellstack.org/en/stable/README/) for build
 ### Run!
 
 ```
-echo "y=1;y;" | ./compiler | ./vm/main
-```
-
-## Interpreter
-
-```
-chmod +x ./interpreter/interpreter.sh
-./interpreter/interpreter.sh
+./main ./script/fibo.txt
 ```
 
 ## example
@@ -36,27 +25,22 @@ chmod +x ./interpreter/interpreter.sh
 ### basic function
 
 ```sh
-# no args
-y = 1; y;
-result:
-1
-
-# single args
-y a = a; y 1;
-result:
-1
-
-# multiple call
-y a = a; y 1; y 2; y 3;
-result:
-1
-2
-3
-
 # factorial
-f 0 = 1; f n = n * f (n-1); f 5;
-result:
-120
-```
+factorial 0 = 1
+factorial n = n * factorial (n - 1)
 
-**Not support multiple args.**
+factorial 10
+
+result:
+3628800
+
+# fibonacci
+fibo 0 = 1
+fibo 1 = 1
+fibo n = fibo (n - 1) + fibo (n - 2)
+
+fibo 10
+
+result:
+89
+```
