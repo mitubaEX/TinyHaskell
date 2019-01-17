@@ -9,7 +9,6 @@ import           Functions
 import           Parser
 import           Printer
 import           Run
-import           SimpleParser
 import           System.Environment (getArgs)
 
 main = do
