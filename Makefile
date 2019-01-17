@@ -1,41 +1,5 @@
-TARGET	= compiler
-
-# LINK (*.o)
-LD	= cc
-LDFLAGS	= -W
-
-# COMPILE (*.c)
-CC	= cc
-CCFLAGS	= -W -O2
-
-# GENERATOR (*.lex and *.yac)
-LEX	= flex
-YAC	= yacc
-
-OBJS	= y.tab.o main.o
-DEFS	= defs.h
-REXP	= rexp.lex
-LEXC	= lex.yy.c
-SYNS	= syns.yac
-YACC	= y.tab.c
-SRC	= src.txt
-TMP	= tmp.txt
-
-all: $(TARGET)
-
-$(TARGET): $(OBJS)
-	$(LD) $(LDFLAGS) -o $@ $(OBJS)
-
-$(OBJS): $(DEFS)
-
-$(LEXC): $(REXP) $(DEFS)
-	$(LEX) $(REXP)
-
-$(YACC): $(SYNS) $(LEXC) $(DEFS)
-	$(YAC) $(SYNS)
-
-%.o: %.c
-	$(CC) $(CCFLAGS) -c $< -o $@
+all: main.hs
+	stack ghc -- --make main.hs
 
 clean:
-	-rm -f $(TARGET)* $(OBJS) $(LEXC) $(YACC) $(TMP) *\~
+	rm -f main ./*.hi ./*.o
