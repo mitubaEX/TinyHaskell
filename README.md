@@ -20,6 +20,13 @@ Note: require [Stack](https://docs.haskellstack.org/en/stable/README/) for build
 ./main ./script/fibo.txt
 ```
 
+## repl
+
+```
+# run with no args
+./main
+```
+
 ## example
 
 ### basic function
